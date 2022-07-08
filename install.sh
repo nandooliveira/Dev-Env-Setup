@@ -1,15 +1,21 @@
 #!/bin/bash
 
-rm -rf ~/.config/nvim/init.vim
-rm -rf ~/.tmux.conf
-rm -rf ~/.gitignore
-
 git clone git@github.com:nandooliveira/Dev-Env-Setup.git ~/Dev-Env-Setup
 
 pushd ~/Dev-Env-Setup
 
+# TMux
+rm -rf ~/.tmux.conf
 ln -s "$(pwd)/.tmux.conf" ~/.tmux.conf
-ln -s "$(pwd)/init.vim" ~/.config/nvim/init.vim
-ln -s "$(pwd)/.gitignore" ~/.gitignore
 
+# NVIM
+rm -rf ~/.config/nvim/init.vim
+ln -s "$(pwd)/init.vim" ~/.config/nvim/init.vim
+## install plugins
 nvim +silent  +PlugInstall +qall
+
+# setup global gitignore
+rm -rf ~/.gitignore
+ln -s "$(pwd)/.gitignore" ~/.gitignore
+git config --global core.excludesFile '~/.gitignore'
+

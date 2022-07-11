@@ -19,3 +19,5 @@ rm -rf ~/.gitignore
 ln -s "$(pwd)/.gitignore" ~/.gitignore
 git config --global core.excludesFile '~/.gitignore'
 
+# install fonts
+cp fonts/* ~/Library/Fonts/

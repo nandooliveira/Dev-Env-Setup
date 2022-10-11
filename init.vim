@@ -50,8 +50,8 @@ Plug 'vim-test/vim-test'
 
 " Languages & Frameworks support
 Plug 'gabrielelana/vim-markdown'
-" Plug 'slashmili/alchemist.vim'
-" Plug 'elixir-lang/vim-elixir'
+Plug 'slashmili/alchemist.vim'
+Plug 'elixir-lang/vim-elixir'
 Plug 'chrisbra/csv.vim'
 Plug 'kchmck/vim-coffee-script'
 Plug 'ap/vim-css-color'
@@ -102,11 +102,12 @@ nmap <silent> <S-Tab> :bprevious<CR>
 nmap <silent> <S-w> :bd<CR>
 nmap <silent> <leader>h :let @/ = ""<CR>
 
+
 " Find files using Telescope command-line sugar.
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-nnoremap <leader>fb <cmd>Telescope buffers<cr>
-nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <leader>ff <cmd>Telescope find_files theme=ivy<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep theme=ivy<cr>
+nnoremap <leader>fb <cmd>Telescope buffers theme=ivy<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags theme=ivy<cr>
 
 " Switch to normal mode from terminal in insert mode
 tmap <C-o> <C-\><C-n>
@@ -141,7 +142,7 @@ set showcmd             " Show (partial) command in status line.
 set showmatch           " Show matching brackets.
 set showmode            " Show current mode.
 set ruler               " Show the line and column numbers of the cursor.
-set rnu                 " Use relative numbers
+"set rnu                 " Use relative numbers
 set number              " Show the line numbers on the left side.
 set formatoptions+=o    " Continue comment marker in new lines.
 set textwidth=0         " Hard-wrap long lines as you type them.
@@ -312,6 +313,8 @@ call deoplete#custom#var('tabnine', {
 \ 'max_num_results': 8,
 \ })
 
+autocmd FileType TelescopePrompt call deoplete#custom#buffer_option('auto_complete', v:false)
+
 " ==> dirvish
 
 let g:dirvish_mode = ':sort ir /^.*[^\/]$/'
@@ -340,7 +343,7 @@ nmap ga <Plug>(EasyAlign)
 
 " ==> vim-test
 
-let test#strategy = 'neovim'
+let test#strategy = 'basic'
 " let test#ruby#rspec#executable = 'docker-compose exec web bundle exec rspec'
 " let test#ruby#rspec#executable = 'docker-compose exec web bin/rspec'
 " let test#enabled_runners = ["ruby#minitest", "ruby#rspec"]
@@ -362,6 +365,21 @@ nmap <leader>gk :Git! diff<CR>
 nmap <leader>gd :Gdiff<CR>
 nmap <leader>gl :diffget //3<CR>
 nmap <leader>ga :diffget //2<CR>
+
+" The tree buffer makes it easy to drill down through the directories of your
+" git repository, but it’s not obvious how you could go up a level to the
+" parent directory. Here’s a mapping of .. to the above command, but
+" only for buffers containing a git blob or tree
+autocmd User fugitive
+  \ if get(b:, 'fugitive_type', '') =~# '^\%(tree\|blob\)$' |
+  \   nnoremap <buffer> .. :edit %:h<CR> |
+  \ endif
+
+" Every time you open a git object using fugitive it creates a new buffer.
+" This means that your buffer listing can quickly become swamped with
+" fugitive buffers. This prevents this from becomming an issue:
+
+autocmd BufReadPost fugitive://* set bufhidden=delete
 
 " ==> Neogit
 

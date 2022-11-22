@@ -33,7 +33,6 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " Git
 Plug 'tpope/vim-fugitive' " commands: :Gblame
 Plug 'nvim-lua/plenary.nvim'
-Plug 'TimUntersberger/neogit' " commands: :Neogit
 Plug 'tommcdo/vim-fugitive-blame-ext'
 Plug 'rhysd/git-messenger.vim' " commands: <leader>gm
 Plug 'airblade/vim-gitgutter'
@@ -62,7 +61,7 @@ Plug 'vim-ruby/vim-ruby'
 Plug 'tpope/vim-rails'
 Plug 'hashivim/vim-terraform'
 Plug 'ray-x/go.nvim'
-Plug 'ray-x/guihua.lua' 
+Plug 'ray-x/guihua.lua'
 
 " Text Objects
 Plug 'kana/vim-textobj-user'
@@ -71,6 +70,9 @@ Plug 'nelstrom/vim-textobj-rubyblock'
 " Themes
 " Plug 'fatih/molokai'
 Plug 'marciomazza/vim-brogrammer-theme'
+Plug 'catppuccin/nvim'
+Plug 'catppuccin/nvim'
+Plug 'mhartington/oceanic-next'
 
 " editorconfig
 Plug 'sgur/vim-editorconfig'
@@ -81,6 +83,10 @@ Plug 'preservim/nerdtree'
 " Rubocop
 Plug 'ngmy/vim-rubocop'
 
+" mermaid
+Plug 'mracos/mermaid.vim'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+
 call plug#end()
 
 syntax enable
@@ -89,7 +95,14 @@ set termguicolors
 filetype plugin indent on
 
 " Themes & Colors
-colorscheme brogrammer
+"colorscheme brogrammer
+" colorscheme catppuccin-mocha
+"
+let g:oceanic_next_terminal_bold = 1
+let g:oceanic_next_terminal_italic = 1
+
+
+colorscheme OceanicNext
 
 set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 
@@ -209,15 +222,15 @@ command! SetWorkingDirToCurrentFile cd %:p:h
 " command! RubocopTerm call asyncrun#run('',
 "   \ { 'mode': 'term', 'pos': 'bottom' },
 "   \ 'docker-compose exec web bundle exec rubocop --parallel')
-" 
+"
 " command! RubyLinter call asyncrun#run('',
 "   \ {},
 "   \ 'docker-compose exec -T web bundle exec standardrb')
-" 
+"
 " command! RubyLinterFix call asyncrun#run('',
 "   \ {},
 "   \ 'docker-compose exec -T web bundle exec standardrb --fix')
-" 
+"
 " nmap <leader>rll :RubyLinter<CR>
 " nmap <leader>rlf :RubyLinterFix<CR>
 
@@ -343,7 +356,9 @@ nmap ga <Plug>(EasyAlign)
 
 " ==> vim-test
 
-let test#strategy = 'basic'
+" let test#strategy = 'basic'
+let test#strategy = 'neovim'
+"
 " let test#ruby#rspec#executable = 'docker-compose exec web bundle exec rspec'
 " let test#ruby#rspec#executable = 'docker-compose exec web bin/rspec'
 " let test#enabled_runners = ["ruby#minitest", "ruby#rspec"]
@@ -381,10 +396,6 @@ autocmd User fugitive
 
 autocmd BufReadPost fugitive://* set bufhidden=delete
 
-" ==> Neogit
-
-nmap <leader>gs :Neogit<CR>
-
 " ==> AsyncRun
 
 let g:asyncrun_status = ''
@@ -414,7 +425,7 @@ let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 let g:NERDTreeWinSize = 30
 " Cmd-Shift-N for nerd tree
-nmap <D-N> :NERDTreeToggle<CR>
+" nmap <D-N> :NERDTreeToggle<CR>
 
 " Open the project tree and expose current file in the nerdtree with Ctrl-\
 " " calls NERDTreeFind iff NERDTree is active, current window contains a modifiable file, and we're not in vimdiff
@@ -431,3 +442,10 @@ nnoremap <silent> <C-\> :call OpenNerdTree()<CR>
 autocmd BufWritePre *.go :silent! lua require('go.format').gofmt()
 " require('go').setup()
 
+
+" set vim to chdir for each file
+" if exists('+autochdir')
+"     set autochdir
+" else
+"     autocmd BufEnter * silent! lcd %:p:h:gs/ /\\ /
+" endif

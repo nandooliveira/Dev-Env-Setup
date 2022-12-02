@@ -25,3 +25,5 @@ ln -s "$(pwd)/.gitconfig" ~/.gitconfig
 
 # install fonts
 cp fonts/* ~/Library/Fonts/
+
+git config --global core.excludesfile ~/.gitignore

@@ -68,7 +68,7 @@ Plug 'kana/vim-textobj-user'
 Plug 'nelstrom/vim-textobj-rubyblock'
 
 " Themes
-" Plug 'fatih/molokai'
+Plug 'fatih/molokai'
 Plug 'marciomazza/vim-brogrammer-theme'
 Plug 'catppuccin/nvim'
 Plug 'catppuccin/nvim'
@@ -87,6 +87,12 @@ Plug 'ngmy/vim-rubocop'
 Plug 'mracos/mermaid.vim'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 
+Plug 'dense-analysis/ale'
+
+Plug 'othree/html5.vim'
+Plug 'pangloss/vim-javascript'
+Plug 'evanleck/vim-svelte', {'branch': 'main'}
+
 call plug#end()
 
 syntax enable
@@ -95,16 +101,34 @@ set termguicolors
 filetype plugin indent on
 
 " Themes & Colors
-"colorscheme brogrammer
+" colorscheme brogrammer
+colorscheme molokai
 " colorscheme catppuccin-mocha
 "
 let g:oceanic_next_terminal_bold = 1
 let g:oceanic_next_terminal_italic = 1
 
 
-colorscheme OceanicNext
+" colorscheme OceanicNext
 
 set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
+
+" Ale
+" Fix files with prettier, and then ESLint.
+" let b:ale_fixers = ['prettier', 'trim_whitespace', 'eslint', 'rubocop']
+" Equivalent to the above.
+let b:ale_fixers = {'javascript': ['prettier', 'eslint'], 'ruby': ['rubocop', 'trim_whitespace']}
+
+nnoremap <silent> <leader>al :ALELint<CR>
+nnoremap <silent> <leader>alf :ALEFix<CR>
+
+" let g:ale_cache_executable_check_failures = 1
+" let g:ale_lint_on_text_changed = 'never'
+
+" You can disable this option too
+" if you don't want linters to run on opening a file
+" let g:ale_lint_on_enter = 0
+" let g:ale_lint_on_save = 0
 
 " Keymaps
 let mapleader=","
@@ -356,8 +380,8 @@ nmap ga <Plug>(EasyAlign)
 
 " ==> vim-test
 
-" let test#strategy = 'basic'
-let test#strategy = 'neovim'
+let test#strategy = 'basic'
+" let test#strategy = 'neovim'
 "
 " let test#ruby#rspec#executable = 'docker-compose exec web bundle exec rspec'
 " let test#ruby#rspec#executable = 'docker-compose exec web bin/rspec'
@@ -449,3 +473,19 @@ autocmd BufWritePre *.go :silent! lua require('go.format').gofmt()
 " else
 "     autocmd BufEnter * silent! lcd %:p:h:gs/ /\\ /
 " endif
+
+" Removes trailing spaces
+function TrimWhiteSpace()
+  %s/\s*$//
+  ''
+endfunction
+
+set list listchars=trail:.,extends:>
+autocmd FileWritePre * call TrimWhiteSpace()
+autocmd FileAppendPre * call TrimWhiteSpace()
+autocmd FilterWritePre * call TrimWhiteSpace()
+autocmd BufWritePre * call TrimWhiteSpace()
+
+map <leader>w :call TrimWhiteSpace()<CR>
+map! <leader>w :call TrimWhiteSpace()<CR>
+

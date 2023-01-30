@@ -111,7 +111,7 @@
 [core]
   autocrlf = false
   editor = vim
-	excludesFile = ~/.gitignore
+	excludesfile = /Users/fernandooliveira/.gitignore
 [advice]
   statusHints = false
 [diff]
@@ -128,3 +128,10 @@
 [user]
 	name = Fernando Oliveira
 	email = nandooliveira.al@gmail.com
+[url "https://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@github.com"]
+  insteadOf = https://github.com
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
